@@ -13,13 +13,27 @@
 <body>
   <div id='wrapper'>
     <div id='header'><?=$header?></div> 
- 		<?php if(isset($navbar)): ?><div id='navbar'><?=get_navbar($navbar)?></div><?php endif; ?>
+ 		<?php if(isset($navbar)): ?>
+    <div id='navbar'><?=get_navbar($navbar)?></div>
+        <?php endif; ?>
                   
  <?php 
- if(isset($_SESSION['filmhandle'])) {
-   if(isset($navbarFilm)): ?><div id='navbarFilm'><?=get_navbar($navbarFilm)?>
-   </div>
+ 
+//dumpa($navbarFilm) ;
+ if(isset($_SESSION['navbar2'])) {
+    // echo $_SESSION['navbar2'];           
+          if($_SESSION['navbar2'] == "blogg"): ?>
+    <div id='navbarBlogg'><?=get_navbar($navbarBlogg)?></div>
        <?php endif; }?>
+                
+  <?php              
+//dumpa($navbarFilm) ;
+ if(isset($_SESSION['navbar2'])) {
+    // echo $_SESSION['navbar2'];
+   if($_SESSION['navbar2'] == "pflimmer"): ?>
+    <div id='navbarFilm'><?=get_navbar($navbarFilm)?></div>
+       <?php endif; }?>
+            
 		
 
     <div id='main'><?=$main?></div>

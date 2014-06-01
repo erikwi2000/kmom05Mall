@@ -9,7 +9,65 @@ session_name(preg_replace('/[:\.\/-_]/', '', __DIR__));
 if (!isset($_SESSION)) { session_start(); }
 // Do it and store it all in variables in the BWi container.
 $bwix['title'] = "Flimmer";
+
+$db = new CDatabase($bwix['database']);
+// Put results into a HTML-table
+//echo "GetDBaseLogin01<br>";
+
+
+if(isset($_SESSION['user'])) {
+  $user = $_SESSION['user'];
+ // echo "logge old";
+}
+else {
+	$user = new CUser();
+  $_SESSION['user'] = $user;
+  //echo "loggenew";
+}
+
+//Check of logged in
+//$pluppas = $user->CheckLoggedIn($bwix['database']);
+
+
+        
+ $rrc = array(0 => "D",);
+$rrc = $user->GetUserLoginStatus();
+  $output = $rrc[0];
+  $way = $rrc[1];  
+
+
+$sql = "SELECT * FROM VMovie;";
+$res = $db->ExecuteSelectQueryAndFetchAll($sql);
+
+
+$tr = "<p>Resultatet från SQL-frågan:</p>";
+$tr .= $output;
+$tr .= "<p><code>{$sql}</code></p>";
+$tr .= "<table><tr><th>Rad</th><th>Id</th><th>Bild</th><th>Titel</th><th>År</th><th>Genre</th></tr>";
+
+foreach($res AS $key => $val) {
+$tr .= "<tr><td>{$key}</td><td>{$val->id}</td><td><img width='80' height='40'"
+. " src='{$val->image}' alt='{$val->title}' /></td><td>{$val->title}</td>"
+. "<td>{$val->year}</td><td>{$val->genre}</td></tr>";
+}
+$tr .= "</table>";
+$bwix['main'] = <<<EOD
+{$tr}
+{$bwix['byline']}
+
+EOD;
+
+// Finally, leave it all to the rendering phase of BWi.
+include(BWI_THEME_PATH);
+
 /*
+
+$acronym = isset($_SESSION['user']) ? $_SESSION['user']->acronym : null;
+echo $acronym;
+*/
+
+
+/*BEHIND
 $hej = $bwix['database'];
 //----------------------------------------
 try {
@@ -61,54 +119,3 @@ else {
   $_SESSION['filmhandle'] = $handle;
 }
 */
-
-$db = new CDatabase($bwix['database']);
-
-
-
-// Put results into a HTML-table
-//echo "GetDBaseLogin01<br>";
-if(isset($_SESSION['logge'])) {
-  $log = $_SESSION['logge'];
- // echo "logge old";
-}
-else {
-	$log = new CUser();
-  $_SESSION['logge'] = $log;
-  //echo "loggenew";
-}
-
-//Check of logged in
-$pluppas = $log->CheckLoggedIn($bwix['database']);
-//echo "<br>ssssssssssssssssss<br>" . $pluppas;
-
-/*
-
-$acronym = isset($_SESSION['user']) ? $_SESSION['user']->acronym : null;
-echo $acronym;
-*/
-
-// Do SELECT from a table
-$sql = "SELECT * FROM VMovie;";
-$res = $db->ExecuteSelectQueryAndFetchAll($sql);
-
-
-$tr = "<p>Resultatet från SQL-frågan:</p>";
-$tr .= $pluppas;
-$tr .= "<p><code>{$sql}</code></p>";
-$tr .= "<table><tr><th>Rad</th><th>Id</th><th>Bild</th><th>Titel</th><th>År</th><th>Genre</th></tr>";
-
-foreach($res AS $key => $val) {
-$tr .= "<tr><td>{$key}</td><td>{$val->id}</td><td><img width='80' height='40'"
-. " src='{$val->image}' alt='{$val->title}' /></td><td>{$val->title}</td>"
-. "<td>{$val->year}</td><td>{$val->genre}</td></tr>";
-}
-$tr .= "</table>";
-$bwix['main'] = <<<EOD
-{$tr}
-{$bwix['byline']}
-
-EOD;
-
-// Finally, leave it all to the rendering phase of BWi.
-include(BWI_THEME_PATH);

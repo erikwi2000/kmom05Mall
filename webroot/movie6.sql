@@ -1,5 +1,5 @@
 
-USE bjvi13;
+
 DROP TABLE IF EXISTS Movie;
 CREATE TABLE Movie
 (

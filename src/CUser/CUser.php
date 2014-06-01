@@ -1,40 +1,121 @@
-<?php
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+<?php 
+class CUser 
+{ 
+  /* 
+    Properties 
+  */ 
 
-/*
+  public $acronym = null; 
+  private $password = null; 
+ public $name = null; 
 
+  /* 
+    Constructor 
+  */ 
+  public function __construct()  
+  { 
+    $this->acronym = isset($_SESSION['user']) ? $_SESSION['user']->GetAcronym() : null; 
+    $this->password = isset($_SESSION['user']) ? $_SESSION['user']->GetPassword() : null; 
+    $this->name = isset($_SESSION['user']) ? $_SESSION['user']->GetName() : null; 
+  } 
 
-    CUser::Login($user, $password) loggar in användaren om användare och lösenord stämmer.
-    CUser::Logout() loggar ut användaren.
-    CUser::IsAuthenticated() returnerar true om användaren är inloggad, annars false.
-    CUser::GetAcronym() returnera användarens akronym.
-    CUser::GetName() returnera användarens namn.
+  public function Login($acronym, $password, $db) 
+  { 
+  // Check if user and password is okey 
+    htmlentities($acronym); 
+    htmlentities($password); 
+    $sql = "SELECT acronym, name FROM USER WHERE acronym = ? AND password = md5(concat(?, salt))"; 
+    $res = $db->ExecuteSelectQueryAndFetchAll($sql, array($acronym, $password)); 
+    if(isset($res[0]))  
+    { 
+      $this->acronym = $acronym; 
+      $this->password = $password; 
+      $sql = "SELECT name FROM USER WHERE acronym = ? AND password = md5(concat(?, salt))"; 
+      $res = $db->ExecuteSelectQueryAndFetchAll($sql, array($acronym, $password)); 
+      $this->name = $res; 
+      $_SESSION['user'] = $this; 
+    } 
+    header('Location: movie_login.php'); 
+  } 
 
+  public function Logout() 
+  { 
+    unset($_SESSION['user']); 
+    unset($this); 
+    header('Location: movie_logout.php'); 
+  } 
 
-
-*/
-class CUser {
-
-  /**
-   * Properties
-   *
-   */
-   	private $aNumber;					// Sidor på tärningen
-  	
-
-  public function __construct($aNumber=7) {
-         /*
-      for($i=0; $i < $aNumber; $i++) {
-     echo "Number:  " . $i;
+  public function GetUserLoginStatus()
+  //  Function 1100
+  {
+    $acronym = isset($_SESSION['user']) ? $_SESSION['user']->acronym : null;
+        if($acronym) {
+         $temp =  $_SESSION['user']->acronym;
+         $output = "Du är inloggad som: " . $temp;     
+         $way = TRUE;
     }
-    return $i;
-    */
-  
+else 
+    {
+         $output = "Du är INTE inloggad.";
+         $way = FALSE;
+}
+    $retur = array($output, $way);
+    return $retur;
+  // return $output;
   }
+  
+  public function IsAuthenticated($db, $redirect = false) 
+  { 
+    if(isset($_SESSION['user'])) 
+    { 
+      $sql = "SELECT * FROM USER;"; 
+      $res = $db->ExecuteSelectQueryAndFetchAll($sql); 
+      foreach($res AS $key => $val)  
+      { 
+           
+      } 
+      return true; 
+    } 
+    else 
+    { 
+      if($redirect){header('Location: movie_login.php');} 
+      else{return false;} 
+    } 
+  } 
+
+// Check if user is authenticated. 
+  public function GetAcronym() 
+  { 
+    $this->acronym = isset($_SESSION['user']) ? $_SESSION['user']->acronym : null; 
+
+    if($this->acronym)  
+    { 
+      return $this->acronym; 
+    } 
+    else  
+    { 
+      return null; 
+    } 
+  } 
+
+  public function GetPassword() 
+  { 
+    return $this->password; 
+  } 
+
+  public function GetName() 
+  { 
+    return $this->name; 
+  } 
+
+  public function ShowSqlDebug($db) 
+  { 
+    $sqlDebug = null; 
+    $this->GetAcronym() ? $sqlDebug = "<div class=debug>" . $db->Dump() . "</div>" : $sqlDebug = ''; 
+    return $sqlDebug;  
+  } 
+ 
+
    public function GetUserAcronym(){
   
  
@@ -133,12 +214,12 @@ return $trxx;
  public function IsUserAuthenticated(){
   
     
-if(isset($_SESSION['logge'])) {
-  $log = $_SESSION['logge'];
+if(isset($_SESSION['user'])) {
+  $log = $_SESSION['user'];
 }
 else {
-	$log = new CUser();
-  $_SESSION['logge'] = $log;
+	$user = new CUser();
+  $_SESSION['user'] = $user;
 }
 
 if(isset($_SESSION['filmhandle'])) {
@@ -154,7 +235,7 @@ $acronym = isset($_SESSION['user']) ? $_SESSION['user']->acronym : null;
 //$acronym = isset($_SESSION['logge']) ? $_SESSION['user']->acronym : null;
 
 if($acronym) {
-  $output = "Du är inloggad somAutt: $acronym ({$_SESSION['user']->name})";
+      $output = "Du är inloggad som " . $this->GetAcronym() . "."; 
     $way = FALSE;
 }
 else {
@@ -166,7 +247,7 @@ return $way;
  }
   
   
-public function GetDBaseLogout($hej) {
+public function GetDBaseLogoutBlogg($hej) {
 
     try {
   $pdo = new PDO($hej['dsn'], $hej['username'], $hej['password'], $hej['driver_options']);	
@@ -179,17 +260,95 @@ catch(Exception $e) {
 $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
 // Get incoming parameters
 $acronym = isset($_SESSION['user']) ? $_SESSION['user']->acronym : null;
-
+/*
 if($acronym) {
   $output = "Du är inloggad som: $acronym ({$_SESSION['user']->name})";
 }
 else {
   $output = "Du är INTE inloggad.";
 }
+*/
+//if($_SESSION[$hej['dsn']]['loggedin']) {
+    if($_SESSION[$hej['dsn']]['loggedin'] && $acronym) {
+  $output = "Du är inloggad som: $acronym ({$_SESSION['user']->name})";
+}
+else {
+  $output = "Du är INTE inloggad.";
+}
+
+//echo "logout in";
 // Logout the user
 if(isset($_POST['logout'])) {
  //  $_SESSION['user']->LoggedIn = FALSE; 
+     $_SESSION[$hej['dsn']]['loggedin'] = FALSE;
+ // unset($_SESSION[$hej['dsn']]['loggedin']);
+    // echo "Logout thing  ";
+    // dumpa($_SESSION['user']);
   unset($_SESSION['user']);
+  //echo "Logout ut";
+  header('Location: blogg_logout.php');
+}
+
+// Do it and store it all in variables in the Anax container.
+$bwix['title'] = "Logout";
+
+$trxx = <<<EOD
+<h1>{$bwix['title']}</h1>
+
+<form method=post>
+  <fieldset>
+  <legend>Login</legend>
+  <p><input type='submit' name='logout' value='Logout'/></p>
+  <p><a href='blogg_login.php'>Login</a></p>
+  <output><b>{$output}</b></output>
+  </fieldset>
+</form>
+
+EOD;
+//---------------
+return $trxx;
+
+}
+  
+public function GetDBaseLogoutMovie($hej) {
+
+    try {
+  $pdo = new PDO($hej['dsn'], $hej['username'], $hej['password'], $hej['driver_options']);	
+}
+catch(Exception $e) {
+  //throw $e; // For debug purpose, shows all connection details
+  throw new PDOException('Could not connect to database, hiding connection details.'); // Hide connection details.
+}
+
+$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+// Get incoming parameters
+$acronym = isset($_SESSION['user']) ? $_SESSION['user']->acronym : null;
+/*
+if($acronym) {
+  $output = "Du är inloggad som: $acronym ({$_SESSION['user']->name})";
+}
+else {
+  $output = "Du är INTE inloggad.";
+}
+*/
+//if($_SESSION[$hej['dsn']]['loggedin']) {
+    if($_SESSION[$hej['dsn']]['loggedin'] && $acronym) {
+  $output = "Du är inloggad som: $acronym ({$_SESSION['user']->name})";
+}
+else {
+  $output = "Du är INTE inloggad.";
+}
+
+//echo "logout in";
+// Logout the user
+if(isset($_POST['logout'])) {
+ //  $_SESSION['user']->LoggedIn = FALSE; 
+     $_SESSION[$hej['dsn']]['loggedin'] = FALSE;
+ // unset($_SESSION[$hej['dsn']]['loggedin']);
+    // echo "Logout thing  ";
+    // dumpa($_SESSION['user']);
+  unset($_SESSION['user']);
+  //echo "Logout ut";
   header('Location: movie_logout.php');
 }
 
@@ -213,7 +372,12 @@ EOD;
 return $trxx;
 
 }
-  public function GetDBaseMovieView($hej){
+
+
+
+
+
+public function GetDBaseMovieView($hej){
 
 
 $bwix['inlinestyle'] = "
@@ -639,9 +803,10 @@ return $pluppas;
   }
   
   
-public function GetDBaseLogin($hej) {
-
-    
+public function GetDBaseLoginMovie($hej) {
+//
+// Logigin to a specific db
+//
 try {
   $pdo = new PDO($hej['dsn'], $hej['username'], $hej['password'], $hej['driver_options']);	
 }
@@ -655,9 +820,16 @@ $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
 
     
     $acronym = isset($_SESSION['user']) ? $_SESSION['user']->acronym : null;
-//echo "pluppa" . $acronym;
+
+$_SESSION[$hej['dsn']]['loggedin'] = 'FALSE';
 
 
+
+
+
+
+//$_SESSION[$user][$hej['dsn']]= "SET";
+//echo $_SESSION[$user][$hej['dsn']];
 //Info strings
 
 $trinfo = "Du kan logga in med doe:doe eller admin:admin.";
@@ -669,9 +841,10 @@ EOD;
 
 $acronym = isset($_SESSION['user']) ? $_SESSION['user']->acronym : null;
 
-//dumpa($acronym);
+dumpa($acronym);
 if($acronym) {
   $output = "Du är inloggad som: $acronym ({$_SESSION['user']->name})";
+  $_SESSION[$hej['dsn']]['loggedin'] = TRUE;
   $trinfo1 = $output;
 
  // $trinfo2 = $trinfo; 
@@ -687,6 +860,7 @@ else {
 //$acronym = isset($_SESSION['user']) ? dumpa($_SESSION['user']->acronym) : null;
 
 // Check if user and password is okey
+echo "<br>pwd check<br>";
 if(isset($_POST['login'])) {
   $sql = "SELECT acronym, name FROM User WHERE acronym = ? AND password = md5(concat(?, salt))";
   $sth = $pdo->prepare($sql);
@@ -694,9 +868,14 @@ if(isset($_POST['login'])) {
   $res = $sth->fetchAll();
   if(isset($res[0])) {
     $_SESSION['user'] = $res[0];
+    echo "-----------------------------------------===========================" . $res;
   }
+    echo "=================================-----------------------------------" . $res;
   header('Location: movie_login.php');
 }
+echo "<br>pwd check2<br>";
+
+
 
 // Do it and store it all in variables in the Anax container.
 $bwix['title'] = "Login";
@@ -718,6 +897,99 @@ EOD;
 return $trxx;
 }
 
+public function GetDBaseLoginBlogg($hej) {
+//
+// Logigin to a specific db
+//
+try {
+  $pdo = new PDO($hej['dsn'], $hej['username'], $hej['password'], $hej['driver_options']);	
+}
+catch(Exception $e) {
+  //throw $e; // For debug purpose, shows all connection details
+  throw new PDOException('Could not connect to database, hiding connection details.'); // Hide connection details.
+}
+
+$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+//=========================================
+
+    
+    $acronym = isset($_SESSION['user']) ? $_SESSION['user']->acronym : null;
+
+$_SESSION[$hej['dsn']]['loggedin'] = 'FALSE';
+
+
+
+
+
+
+//$_SESSION[$user][$hej['dsn']]= "SET";
+//echo $_SESSION[$user][$hej['dsn']];
+//Info strings
+
+$trinfo = "Du kan logga in med doe:doe eller admin:admin.";
+$trinfonotlogggedin = <<<EOD
+  <p><label>Användare:<br/><input type='text' name='acronym' value=''/></label></p>
+  <p><label>Lösenord:<br/><input type='text' name='password' value=''/></label></p>
+  <p><input type='submit' name='login' value='Login'/></p>
+EOD;
+
+$acronym = isset($_SESSION['user']) ? $_SESSION['user']->acronym : null;
+
+dumpa($acronym);
+if($acronym) {
+  $output = "Du är inloggad som: $acronym ({$_SESSION['user']->name})";
+  $_SESSION[$hej['dsn']]['loggedin'] = TRUE;
+  $trinfo1 = $output;
+
+ // $trinfo2 = $trinfo; 
+    $trinfo2 = "*************************************";
+}
+else {
+  $output = "Du är INTE inloggad.";
+  $trinfo1 = $output;
+    $trinfo1 .= $trinfonotlogggedin;
+  $trinfo2 = $trinfo;
+
+}
+//$acronym = isset($_SESSION['user']) ? dumpa($_SESSION['user']->acronym) : null;
+
+// Check if user and password is okey
+echo "<br>pwd check<br>";
+if(isset($_POST['login'])) {
+  $sql = "SELECT acronym, name FROM User WHERE acronym = ? AND password = md5(concat(?, salt))";
+  $sth = $pdo->prepare($sql);
+  $sth->execute(array($_POST['acronym'], $_POST['password']));
+  $res = $sth->fetchAll();
+  if(isset($res[0])) {
+    $_SESSION['user'] = $res[0];
+  //  echo "-----------------------------------------===========================" . $res;
+  }
+  //  echo "=================================-----------------------------------" . $res;
+  header('Location: blogg_login.php');
+}
+//echo "<br>pwd check2<br>";
+
+
+
+// Do it and store it all in variables in the Anax container.
+$bwix['title'] = "LoginBlogg";
+
+$trxx = <<<EOD
+<h1>{$bwix['title']}</h1>
+
+<form method=post>
+  <fieldset>
+  <legend>Login</legend>
+  {$trinfo1}
+  <p><a href='blogg_logout.php'>Logout</a></p>
+  <output><b>{$trinfo2}</b></output>
+  </fieldset>
+</form>
+
+EOD;
+
+return $trxx;
+}
 
 
 

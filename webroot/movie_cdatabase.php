@@ -10,7 +10,7 @@
  * This is a Anax pagecontroller.
  *
  */
-// Include the essential config-file which also creates the $anax variable with its defaults.
+// Include the essential config-file which also creates the $bwix variable with its defaults.
 include(__DIR__ . '/config.php'); 
 
 if(isset($_SESSION['filmhandle'])) {

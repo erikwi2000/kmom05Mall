@@ -128,7 +128,7 @@ function orderby($column) {
 
 
 // Connect to a MySQL database using PHP PDO
-//$db = new CDatabase($anax['database']);
+//$db = new CDatabase($bwix['database']);
 
 if(isset($_SESSION['CDatabase'])) {
   $db = $_SESSION['CDatabase'];
@@ -259,7 +259,7 @@ $hitsPerPage = getHitsPerPage(array(2, 4, 8), $hits);
 $navigatePage = getPageNavigation($hits, $page, $max);
 $sqlDebug = $db->Dump();
 
-//$anax['main'] 
+//$bwix['main'] 
 
 $trxx = <<<EOD
 <h1>{$bwix['title']}</h1>

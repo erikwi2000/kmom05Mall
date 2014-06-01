@@ -63,7 +63,7 @@ include(__DIR__ . '/databaseHOME.php');
 
 
 $bwix['lang']         = 'sv';
-$bwix['title_append'] = ' | oophp';
+$bwix['title_append'] = ' | kmom05';
 $bwix['stylesheets'] = array('css/webb.css');
 $bwix['stylesheets'] = array('css/style.css');
 
@@ -155,10 +155,33 @@ EOD;
  *
  */
 
+
+
+$bwix['navbarBlogg'] = array(
+
+  'class' => 'nb-plain2',
+//	 'class' => 'navbar',
+  'items' => array(
+    'hem'       => array('text'=>'Innehåll',   'url'=>'blogg_view.php',        'title' => 'Bloggen'),
+    'reset'     => array('text'=>'Återställ',     'url'=>'blogg_reset.php',          'title' => 'Återställ'),
+     'login'     => array('text'=>'Login',         'url'=>'movie_login.php',          'title' => 'Logga in för att ändra i databasen'),
+    'logout'    => array('text'=>'Logout',        'url'=>'movie_logout.php',         'title' => 'Logga ut'),
+  
+      
+     'kallkod'   => array('text'=>'Källkod',       'url'=>'source.php',               'title' => 'Se källkoden'),
+  ),
+  'callback_selected' => function($url) {
+    if(basename($_SERVER['SCRIPT_FILENAME']) == $url) {
+      return true;
+    }
+  }
+);
+
 $bwix['navbarFilm'] = array(
 
   'class' => 'nb-plain2',
 //	 'class' => 'navbar',
+ //   	 'class' => 'navbarx',
   'items' => array(
     'hem'       => array('text'=>'Alla filmer',   'url'=>'movie_connect.php',        'title' => 'Alla filmer'),
     'reset'     => array('text'=>'Återställ',     'url'=>'movie_reset.php',          'title' => 'Återställ'),
@@ -168,6 +191,12 @@ $bwix['navbarFilm'] = array(
     'genre'     => array('text'=>'Sök per genre', 'url'=>'movie_by_genre.php',       'title' => 'Sök film per genre'),
     'page'      => array('text'=>'Paginering',    'url'=>'movie_page.php',           'title' => 'Dela upp resultatet på sidor'),
       */
+    //---------------------
+      
+
+      
+      //------------------------------
+      
     'sort'      => array('text'=>'Sortera',       'url'=>'movie_sort.php',           'title' => 'Sortera per kolumn'),
     'login'     => array('text'=>'Login',         'url'=>'movie_login.php',          'title' => 'Logga in för att ändra i databasen'),
     'logout'    => array('text'=>'Logout',        'url'=>'movie_logout.php',         'title' => 'Logga ut'),
@@ -187,14 +216,19 @@ $bwix['navbarFilm'] = array(
 
 $bwix['navbar'] = array(
 
-  'class' => 'nb-plain',
+ 'class' => 'nb-plain',
 //	 'class' => 'navbar',
+ //    'class' => 'navbarx',
   'items' => array(
     'hem'          => array('text'=>'Hem',          'url'=>'me.php',          'title' => 'Min presentation om mig själv'),
     'redovisning'  => array('text'=>'Redovisning',  'url'=>'redovisning.php', 'title' => 'Redovisningar för kursmomenten'),
     'tarningsspel' => array('text'=>'Tärningsspel', 'url'=>'tarning.php',     'title' => 'SpelaTärning'),   
-    'pflimmer'     => array('text'=>'Pflimmer',     'url'=>'pflimmer.php',    'title' => 'KollaFilm'),    
+
+
+          'pflimmer'     => array('text'=>'Pflimmer',     'url'=>'pflimmer.php',    'title' => 'KollaFilm'),    
+      'blogger'     => array('text'=>'Bloggsida',     'url'=>'blogg.php',    'title' => 'Blogga'), 
     'kallkod'      => array('text'=>'Källkod',      'url'=>'source.php',      'title' => 'Se källkoden'),
+
   ),
   'callback_selected' => function($url) {
     if(basename($_SERVER['SCRIPT_FILENAME']) == $url) {

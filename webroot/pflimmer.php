@@ -15,18 +15,27 @@ if (!isset($_SESSION)) { session_start(); }
 $bwix['title'] = "Flimmer";
 
 //session_start(); 
-
+//echo "aaaaaaaaaaaaa";
 // set the value of the session variable 'foo'
-$_SESSION['foo']='  bar'; 
+$_SESSION['foo']='  bar     ---    '; 
 $tt = $_SESSION['foo'];
-
+$_SESSION['navbar2']='pflimmer'; 
 // echo a little message to say it is done
-
+//echo $_SESSION['foo'] . $_SESSION['navbar2'];
 //echo 'Setting value of foo' . $tt; 
-$acronym = isset($_SESSION['user']) ?  $_SESSION['user']->acronym : null;
+//$acronym = isset($_SESSION['user']) ?  $_SESSION['user']->acronym : null;
 //echo "user-  " . $test;
 
 
+if(isset($_SESSION['user'])) {
+  $user = $_SESSION['user'];
+ // echo "logge old";
+}
+else {
+	$user = new CUser();
+  $_SESSION['user'] = $user;
+  //echo "loggenew";
+}
 
 
 if(isset($_SESSION['filmhandle'])) {
@@ -52,6 +61,31 @@ else {
 }
 
 */
+//echo "wwwwwwwwwwwwwwwww";
+
+ $rrc = array(0 => "D",);
+$rrc = $user->GetUserLoginStatus();
+  $output = $rrc[0];
+  $way = $rrc[1];  
+
+
+
+/*
+  
+if($user->GetAcronym()) 
+{ 
+    $output = "Du är inloggad som " . $user->GetAcronym() . "."; 
+} 
+else 
+{ 
+    $output = "Du är INTE inloggad."; 
+} 
+
+*/
+
+
+
+
 //$fromdb = $handle->GetDBasePflimmerStart($bwix['database']);
 //$db = new CDatabase($bwix['database']);
 
@@ -67,7 +101,7 @@ EOD;
 
 
 $bwix['main'] = <<<EOD
-
+<br><h3>{$output}</h3>
 {$bwix['byline']}
 
 EOD;

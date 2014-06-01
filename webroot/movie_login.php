@@ -1,35 +1,73 @@
-<?php 
-/**
- * This is a Bwix pagecontroller.
- *
- */
-// Include the essential config-file which also creates the $anax variable with its defaults.
-include(__DIR__.'/config.php'); 
+<?php  
+/** 
+ * 
+ * 
+ */ 
 
+
+
+
+// Include the essential config-file which also creates the $paratus variable with its defaults. 
+include(__DIR__.'/config.php');  
 session_name(preg_replace('/[:\.\/-_]/', '', __DIR__));
 if (!isset($_SESSION)) { session_start(); }
-// Do it and store it all in variables in the BWi container.
-$bwix['title'] = "Login";
 
 
-if(isset($_SESSION['logge'])) {
-  $log = $_SESSION['logge'];
+
+//Create objects to access the database and userhandling 
+
+$db = new CDatabase($bwix['database']); 
+
+/*
+if(isset($_SESSION['user'])) {
+  $user = $_SESSION['user'];
   //echo "logge old";
 }
 else {
-	$log = new CUser();
-  $_SESSION['logge'] = $log;
+	$user = new CUser();
+  $_SESSION['user'] = $user;
   //echo "logge new";
 }
+*/
 
+$user = new CUser(); 
 
-$fromdb = $log->GetDBaseLogin($bwix['database']);
-//echo "GetDBaseLogin04<br>";
- 
+// Check if user is authenticated. 
+
+if($user->GetAcronym()) 
+{ 
+    $output = "Du är inloggad som " . $user->GetAcronym() . "."; 
+} 
+else 
+{ 
+    $output = "Du är INTE inloggad."; 
+} 
+
+if(isset($_POST['login']))  
+{ 
+    $user->Login($_POST['acronym'], $_POST['password'], $db); 
+} 
+
+// Do it and store it all in variables in the Paratus container. 
+$bwix['title'] = 'Login'; 
+
 $bwix['main'] = <<<EOD
-{$fromdb}
-{$bwix['byline']}
-
+<article class = "posts"> 
+<h1>{$bwix['title']}</h1> 
+<form method=post> 
+  <fieldset> 
+  <legend>Login</legend> 
+  <p><em>Du kan logga in med doe:doe eller admin:admin.</em></p> 
+  <p><label>Användare:<br/><input type='text' name='acronym' value=''/></label></p> 
+  <p><label>Lösenord:<br/><input type='text' name='password' value=''/></label></p> 
+  <p><input type='submit' name='login' value='Login'/></p> 
+  <p><a href='movie_logout.php'>Logout</a></p> 
+  <output><b>{$output}</b></output> 
+  </fieldset> 
+</form> 
+{$bwix['byline']} 
+</article> 
 EOD;
 
-include(BWI_THEME_PATH);
+// Finally, leave it all to the rendering phase of Anax. 
+include(BWI_THEME_PATH); 

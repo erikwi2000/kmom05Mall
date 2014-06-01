@@ -3,7 +3,7 @@
  * This is a Bwix pagecontroller.
  *
  */
-// Include the essential config-file which also creates the $anax variable with its defaults.
+// Include the essential config-file which also creates the $bwix variable with its defaults.
 include(__DIR__.'/config.php'); 
 
 session_name(preg_replace('/[:\.\/-_]/', '', __DIR__));
@@ -154,7 +154,7 @@ $bwix['title'] = "Radera film";
 
 $sqlDebug = $db->Dump();
 
-//$anax['main'] 
+//$bwix['main'] 
 
 $trxx = <<<EOD
 <h1>{$bwix['title']}</h1>

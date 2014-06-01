@@ -3,7 +3,7 @@
  * This is a Anax pagecontroller.
  *
  */
-// Include the essential config-file which also creates the $anax variable with its defaults.
+// Include the essential config-file which also creates the $bwix variable with its defaults.
 include(__DIR__.'/config.php'); 
 session_name(preg_replace('/[:\.\/-_]/', '', __DIR__));
 if (!isset($_SESSION)) { session_start(); }
@@ -65,7 +65,9 @@ $db = new CDatabase($bwix['database']);
 $acronym = isset($_SESSION['user']) ? $_SESSION['user']->acronym : null;
 //dumpa($acronym);
 if($acronym) {
-  $output = "Du är inloggad som: $acronym ({$_SESSION['user']->name})";
+  $output = "Du är inloggad som: ";
+  $acronym = $_SESSION['user']->name;
+  $output .= $acronym;
   $way = TRUE;
 }
 else {

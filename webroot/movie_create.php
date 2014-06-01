@@ -3,42 +3,26 @@
  * This is a Anax pagecontroller.
  *
  */
-// Include the essential config-file which also creates the $anax variable with its defaults.
+// Include the essential config-file which also creates the $bwix variable with its defaults.
 include(__DIR__.'/config.php'); 
 session_name(preg_replace('/[:\.\/-_]/', '', __DIR__));
 if (!isset($_SESSION)) { session_start(); }
-/*
-if(isset($_SESSION['filmhandle'])) {
-  $handle = $_SESSION['filmhandle'];
-}
-else {
-	$handle = new CFilmHandle();
-  $_SESSION['filmhandle'] = $handle;
-}
-*/
-/*
-if(isset($_SESSION['cdatabase'])) {
-  $db = $_SESSION['cdatabase'];
-}
-else {
 
-//echo "ZZZZNoDB<br>";
-	$db = new CDatabase($bwix['database']);
-  $_SESSION['cdatabase'] = $db;
-}
-*/
-/*
-if(isset($_SESSION['logge'])) {
-  $log = $_SESSION['logge'];
-  //echo "logge old";
+  $_SESSION['navbar2']='pflimmer'; 
+
+
+if(isset($_SESSION['user'])) {
+  $user = $_SESSION['user'];
+ // echo "logge old";
 }
 else {
-	$log = new CUser();
-  $_SESSION['logge'] = $log;
+	$user = new CUser();
+  $_SESSION['user'] = $user;
  // echo "loggenew";
 }
 
-*/
+
+
 
 $bwix['inlinestyle'] = "
 .orderby a {
@@ -101,7 +85,7 @@ $acronym = isset($_SESSION['user']) ? $_SESSION['user']->acronym : null;
 
 
 if($acronym) {
-  $output = "Du är inloggad som: $acronym ({$_SESSION['user']->name})";
+  $output = "Du är inloggad som " . $user->GetAcronym() . ".";
   $way = TRUE;
 }
 else {
@@ -154,7 +138,16 @@ else {
 //Check of logged in
 //
 //
-$pluppas = $db->CheckLoggedIn($bwix['database']);
+
+        
+ $rrc = array(0 => "D",);
+$rrc = $user->GetUserLoginStatus();
+  $output = $rrc[0];
+  $way = $rrc[1];  
+
+//$pluppas = $db->CheckLoggedIn($bwix['database']);
+$pluppas = $output;
+
 //<h3>{$pluppas}</h3>
 //
 //

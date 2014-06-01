@@ -204,7 +204,7 @@ alla kopplingar mellan olika data på ett konsistent sätt.
 <p>Jaa även läsanvisningar fungerade väl, allt läst och en del förstått. 
     <br>Men uppgifterna osv
 <h3><b>speciellt uppmaningen att "göra själv". </b></h3>
-    <p>Valde en lösning "CFilmhandle" medn fick en liten bit kvar <br>som
+    <p>Valde en lösning "CFilmhandle" med fick en liten bit kvar <br>som
         mest landade jag på 2000 rader!
 <p>Då gav jag upp och tittade mer i "fusklappen" och gjorde på det
     sättet i stället, mycket enklare. Nåväl jag kanske inte har gjort

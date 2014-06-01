@@ -120,7 +120,7 @@ $bwix['title'] = "PAGINERING";
 $hitsPerPage = getHitsPerPage(array(2, 4, 8));
 $navigatePage = getPageNavigation($hits, $page, $max);
 
-//$anax['main'] 
+//$bwix['main'] 
 
 //$trxx 
         

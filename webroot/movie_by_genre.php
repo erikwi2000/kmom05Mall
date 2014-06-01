@@ -85,7 +85,7 @@ $bwix['genre'] = "Sök film per genre";
 
 $paramsPrint = htmlentities(print_r($params, 1));
 
-//$anax['main'] 
+//$bwix['main'] 
 
 $bwix['main'] = <<<EOD
 <h1>{$bwix['genre']}</h1>

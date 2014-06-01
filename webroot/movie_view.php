@@ -26,25 +26,47 @@ else {
 }
 
 
-if(isset($_SESSION['logge'])) {
-  $log = $_SESSION['logge'];
+if(isset($_SESSION['user'])) {
+  $user = $_SESSION['user'];
   //echo "logge old";
 }
 else {
-	$log = new CUser();
-  $_SESSION['logge'] = $log;
+	$user = new CUser();
+  $_SESSION['user'] = $user;
  // echo "loggenew";
 }
 
 /////////////////////////////////////
-$check = $log->IsUserAuthenticated();
+$check = $user->IsUserAuthenticated();
 
-$pluppas = $log->CheckLoggedIn($bwix['database']);
+$pluppas = $user->CheckLoggedIn($bwix['database']);
 //echo $pluppas;
 
 //$fromdb = $handle->GetDBaseMovieView($bwix['database']);
 //-----------------------------------------
+   
+  $rrc = array(0 => "D",);
+$rrc = $user->GetUserLoginStatus();
+  $output = $rrc[0];
+  $way = $rrc[1];  
 
+/*
+
+if($user->GetAcronym()) 
+{ 
+    $output = "Du är inloggad som " . $user->GetAcronym() . "."; 
+} 
+else 
+{ 
+    $output = "Du är INTE inloggad."; 
+} 
+
+*/
+
+
+
+
+//$pluppas = $output;
 
  
 
@@ -82,7 +104,7 @@ $trxx = $fromdb;
 
 //echo "<br>Tillbaka <br>";
 $bwix['main'] = <<<EOD
-{$pluppas}
+<h3>{$output}</h3>
 {$trxx}
 
 {$bwix['byline']}

@@ -3,11 +3,22 @@
  * This is a Bwix pagecontroller.
  *
  */
-// Include the essential config-file which also creates the $anax variable with its defaults.
+// Include the essential config-file which also creates the $bwix variable with its defaults.
 include(__DIR__.'/config.php'); 
 
 session_name(preg_replace('/[:\.\/-_]/', '', __DIR__));
 if (!isset($_SESSION)) { session_start(); }
+
+if(isset($_SESSION['user'])) {
+  $user = $_SESSION['user'];
+ // echo "logge old";
+}
+else {
+	$user = new CUser();
+  $_SESSION['user'] = $user;
+  //echo "loggenew";
+}
+
 
 // Do it and store it all in variables in the BWi container.
 $bwix['title'] = "Flimmer";
@@ -106,13 +117,32 @@ catch(Exception $e) {
 }
  
  */
+
+  $rrc = array(0 => "D",);
+$rrc = $user->GetUserLoginStatus();
+  $output = $rrc[0];
+  $way = $rrc[1];  
+
+$action = $way;
   
- 
+  
+  /*
+    if($user->GetAcronym()) 
+{ 
+    $output = "Du är inloggad som " . $user->GetAcronym() . "."; 
+    $action = TRUE;
+} 
+else 
+{ 
+    $output = "Du är INTE inloggad."; 
+    $action = FALSE;
+}    
+*/
 
 // Do SELECT from a table
   
 
-$action =  isset($_SESSION['user']) ? TRUE : FALSE;
+//$action =  isset($_SESSION['user']) ? TRUE : FALSE;
   /* if($action){echo "wwwwwwwweeeeeeeeeeeerrrr";}
    else {
        
@@ -143,7 +173,7 @@ $sqlDebug = $db->Dump();
 if($action){
 $trxx = <<<EOD
 <h1>{$bwix['title']}</h1>
-<h3>Du är inloggad.</h3>
+<h3>{$output}</h3>
 <table>
 {$tr}
 </table>
@@ -153,7 +183,7 @@ EOD;
  else {
 $trxx = <<<EOD
 <h1>{$bwix['title']}</h1>
-<h3> Du kan inte radera då du inte är inloggad.</h3>
+<h3>{$output} <br> Du kan inte radera då du inte är inloggad.</h3>
 EOD;
  
  }

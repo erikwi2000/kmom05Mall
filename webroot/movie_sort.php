@@ -15,7 +15,7 @@ if (!isset($_SESSION)) { session_start(); }
 
 // echo the session variable
 //echo 'The value of foo is '.$_SESSION['foo']; 
-
+/*
 if(isset($_SESSION['logge'])) {
   $log = $_SESSION['logge'];
   //echo "logge old";
@@ -25,8 +25,17 @@ else {
   $_SESSION['logge'] = $log;
   //echo "logge new";
 }
+*/
 
-
+if(isset($_SESSION['user'])) {
+  $user = $_SESSION['user'];
+ // echo "logge old";
+}
+else {
+	$user = new CUser();
+  $_SESSION['user'] = $user;
+  //echo "loggenew";
+}
 
 if(isset($_SESSION['filmhandle'])) {
   $handle = $_SESSION['filmhandle'];
@@ -48,7 +57,32 @@ $bwix['inlinestyle'] = "
   color: black;
 }
 ";
-$pluppas = $log->CheckLoggedIn($bwix['database']);
+//$pluppas = $log->CheckLoggedIn($bwix['database']);
+ 
+
+        
+ $rrc = array(0 => "D",);
+$rrc = $user->GetUserLoginStatus();
+  $output = $rrc[0];
+  $way = $rrc[1];  
+
+/*
+    if($user->GetAcronym()) 
+{ 
+    $output = "Du är inloggad som " . $user->GetAcronym() . "."; 
+} 
+else 
+{ 
+    $output = "Du är INTE inloggad."; 
+} 
+
+*/
+
+
+$pluppas = $output;
+
+
+
 
 
 // Get parameters for sorting

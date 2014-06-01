@@ -8,7 +8,7 @@
 </head>
 <body>
   <div id='wrapper'>
-    <div id='header'><img class='sitelogo' src='img/anax.png' alt='Anax Logo'/>
+    <div id='header'><img class='sitelogo' src='img/bwix.png' alt='Anax Logo'/>
 <span class='sitetitle'>Min Filmdatabas</span>
 <span class='siteslogan'>Kodexempel för hur man gör sin egen filmdatabas sökbar</span></div>
     <div id='navbar'><nav>
