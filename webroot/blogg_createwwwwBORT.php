@@ -33,28 +33,14 @@ $pluppas = $user->CheckLoggedIn($bwix['database']);
 //echo "PLUPPAS  " . $pluppas;
 // Get parameters 
 
-/*
-if($idnew) {
-$sql = 'INSERT INTO content (id) VALUES (NULL);';
-
- $url = empty($url) ? null : $url;
- // $params = array($title, $slug, $url, $data, $type, $filter, $published, $id);
- //$res = $db->ExecuteQuery($sql, $params);
-$res = $db->ExecuteQuery($sql);
-$idnew = FALSE;
-echo "<br> New createn!!!!" ;
 
 
-}
-
-*/
-
-
-
+$idnew     = isset($_POST['idnew'])    ? strip_tags($_POST['idnew']) : (isset($_GET['idnew']) ? strip_tags($_GET['idnew']) : null);
+echo "<br> idnew  " . $idnew . "<br>";
 $id     = isset($_POST['id'])    ? strip_tags($_POST['id']) : (isset($_GET['id']) ? strip_tags($_GET['id']) : null);
-//echo "<br> iD " . $id;
+echo "<br> iD " . $id;
 $title  = isset($_POST['title']) ? $_POST['title'] : null;
-//echo "<br> title " . $title . "  <br>";
+echo "<br> title " . $title . "  <br>";
 $slug   = isset($_POST['slug'])  ? $_POST['slug']  : null;
 $url    = isset($_POST['url'])   ? strip_tags($_POST['url']) : null;
 $data   = isset($_POST['data'])  ? $_POST['data'] : array();
@@ -63,19 +49,55 @@ $filter = isset($_POST['filter']) ? $_POST['filter'] : array();
 $published = isset($_POST['published'])  ? strip_tags($_POST['published']) : array();
 $save   = isset($_POST['save'])  ? true : false;
 $acronym = isset($_SESSION['user']) ? $_SESSION['user']->acronym : null;
-//echo "<br> stripped<br>";
+echo "<br> stripped<br>";
 
 // Check that incoming parameters are valid
 isset($acronym) or die('Check: You must login to edit.');
 is_numeric($id) or die('Check: Id must be numeric.');
-//echo "<br> acronym id " . $acronym . "  --  " . $id . "  <br>";
+echo "<br> acronym id " . $acronym . "  --  " . $id . "  <br>";
 // dumpa($db);
 // Check if form was submitted
+
+
+echo "<br> idnew " . $idnew;
+if($idnew) {
+//$sql = 'INSERT INTO content (id) VALUES (NULL);';
+
+/*
+ //   $output = $content->createNew();   
+ $url = empty($url) ? null : $url;
+ // $params = array($title, $slug, $url, $data, $type, $filter, $published, $id);
+ //$res = $db->ExecuteQuery($sql, $params);
+$res = $db->ExecuteQuery($sql);
+$idnew = FALSE;
+*/
+
+        $title = isset($_POST['title']) ? $_POST['title'] : null;  
+          $sql = 'INSERT INTO Content (title) VALUES (?)';  
+          $acronym = isset($_SESSION['user']) ? $_SESSION['user']->acronym : null;  
+          $params = array($title);  
+          $this->db->ExecuteQuery($sql,$params);  
+          $id = $this->db->LastInsertId(); 
+          
+          echo "<br> ID  " . $id;
+          $id = 7;
+          header('Location:blogg_edit.php?id=' . $id); 
+
+
+
+echo "<br> New createn!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" ;
+}
+
+
+
+
+
+
 $output = null;
-//echo "<br> outside saved <br>";
-$updated = "";
+echo "<br> outside saved <br>";
+
 if($save) {
-   // echo "<br> inside saved <br>";
+    echo "<br> inside saved <br>";
   $sql = '
     UPDATE Content SET
       title   = ?,
@@ -89,7 +111,6 @@ if($save) {
     WHERE 
       id = ?
   ';
-  
   $url = empty($url) ? null : $url;
   $params = array($title, $slug, $url, $data, $type, $filter, $published, $id);
   $res = $db->ExecuteQuery($sql, $params);
@@ -103,14 +124,65 @@ if($save) {
 
 
 // Select from database
+
+
+/*
+
+$sql = 'INSERT INTO content (id) VALUES (NULL);';
+
+ $url = empty($url) ? null : $url;
+ // $params = array($title, $slug, $url, $data, $type, $filter, $published, $id);
+ //$res = $db->ExecuteQuery($sql, $params);
+$res = $db->ExecuteQuery($sql);
+
+*/
+
+ $sql = '
+    UPDATE Content SET
+      title   = ?,
+      slug    = ?,
+      url     = ?,
+      data    = ?,
+      type    = ?,
+      filter  = ?,
+      published = ?,
+      updated = NOW()
+    WHERE 
+      id = ?
+  ';
+
+//$res = $db->ExecuteQuery($sql);
+
+
+
+
+
+
+/*
 $sql = 'SELECT * FROM Content WHERE id = ?';
 $res = $db->ExecuteSelectQueryAndFetchAll($sql, array($id));
-//  dumpa($res);
+
+*/
+ dumpa($res);
+ 
+//$sql = 'SELECT LAST_INSERT_ID();';
+ 
+ 
 if(isset($res[0])) {
   $c = $res[0];
 }
 else {
-  die('Misslyckades: det finns inget innehåll med sådant id.');
+  //die('Misslyckades: det finns inget innehåll med sådant id.');
+  $print = $db->lastInsertId();
+  echo "<br> last id ---->>  " . $print;
+    //$print = PDO::lastInsertId;
+   //echo "<br> last id ---->>  " . $print;
+  $sql = ' INSERT INTO Content Values (?,"", "", "", "", "", "", NOW(), NOW(), NOW(), NOW());';
+ // insert into content Values (9,"", "", "", "", "", "", NOW(), NOW(), NOW(), NOW());
+  
+   $params = array($title, $slug, $url, $data, $type, $filter, $published, $id);
+  $res = $db->ExecuteQuery($sql, $params);
+  dumpa($res);
 }
 
 // Sanitize content before using it.
@@ -122,37 +194,11 @@ $type   = htmlentities($c->type, null, 'UTF-8');
 $filter = htmlentities($c->filter, null, 'UTF-8');
 $published = htmlentities($c->published, null, 'UTF-8');
 
-/**
- * Create a slug of a string, to be used as url.
- *
- * @param string $str the string to format as slug.
- * @returns str the formatted slug. 
- */
-$slug = $bloggContent->slugify($slug);
-
-
 
 // Prepare content and store it all in variables in the Anax container.
 $bwix['title'] = "Uppdatera innehåll";
 $bwix['debug'] = $db->Dump();
-//$filter = array("err", "yuu","ghh");
-
-/*
-
-<form method="post" action="?p=choose-stylesheet-process">
-	<fieldset>
-		<!-- <legend>Välj Stylesheet</legend> -->
-		<p>
-			<label for="input1">Stylesheet:</label><br>
-			<select id='input1' name='stylesheet' onchange='form.submit();'><option value='-1'>Webbplatsens standard stylesheet</option><option value='debug.css' >debug.css</option><option value='empty.css' >empty.css</option><option value='forms.css' >forms.css</option><option value='stylesheet.css' >stylesheet.css</option><option value='stylesheet_blue.css' >stylesheet_blue.css</option></select>		</p>
-		
-		<p>
-			Du använder webbplatsens standard stylesheet.		</p>
-
-	</fieldset>
-</form>
-
-*/
+$idnew = FALSE;
 $bwix['main'] = <<<EOD
 <h1>{$bwix['title']}</h1>
 

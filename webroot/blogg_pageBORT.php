@@ -41,10 +41,10 @@ else {
 
 // Sanitize content before using it.
 $title  = htmlentities($c->title, null, 'UTF-8');
-$data   = doFilter(htmlentities($c->DATA, null, 'UTF-8'), $c->FILTER);
+$data   = doFilter(htmlentities($c->data, null, 'UTF-8'), $c->filter);
 
 
-// Prepare content and store it all in variables in the Anax container.
+// Prepare content and store it all in variables in the Bwix container.
 $bwix['title'] = $title;
 $bwix['debug'] = $db->Dump();
 

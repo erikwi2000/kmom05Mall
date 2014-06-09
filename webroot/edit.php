@@ -13,10 +13,15 @@
  */
 // Include the essential config-file which also creates the $anax variable with its defaults.
 include(__DIR__.'/config.php'); 
+// Get parameters   
+
+
+
+// Get parameters   
 
 
 // Connect to a MySQL database using PHP PDO
-$db = new CDatabase($anax['database']);
+$db = new CDatabase($bwix['database']);
 
 
 // Get parameters 

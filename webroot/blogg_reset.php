@@ -67,32 +67,19 @@ $password = '';
     "login"  => $login,
     "password"  => $password,
 ];
-dumpa($hurray);
+//dumpa($hurray);
 
-$outputres = "";
+$output2 = "";
 
 //echo "Tvaan <br>";
 if(isset($_POST['restore']) || isset($_GET['restore'])) {		
-	
-    
-    $cmd = "$mysql -h {$host} -u {$login} -p {$password} < $sql 2>&1";
-	//$cmd = "$mysql -h{$host} -u{$login}  -p{$password} < $sql";
-        $res = exec($cmd);
-        dumpa($res);
-	$outputres = "<p>Databasen är återställd via kommandot<br/><code>{$cmd}</code></p><p>{$res}</p>";
-        
-        
-       // echo $output;
-	//dumpa($cmd);
-        echo "<br>www<br>";
-           //     $output2 = $bloggContent->ReCreateTableWithContent($hurray) ;
-        echo "<br>zzz";
-        echo "<br> output" . $output ;
-        
+                $output2 = $bloggContent->ReCreateTableWithContent($hurray) ; 
         }
 // Do it and store it all in variables in the Anax container.
-        
-       
+ 
+ if(isset($_POST['restoreInside']) || isset($_GET['restoreInside'])) {       
+        $output2 = CreateTableWithContent() ;      
+ }
  $rrc = array(0 => "D",);
 $rrc = $user->GetUserLoginStatus();
   $output = $rrc[0];
@@ -108,7 +95,7 @@ $bwix['title'] = "Återställ databasen <br>(till ursprungligt skick)";
 <h3>$output</h3>
 <form method=post>
 <input type=submit name=restore value='Återställ databasen'/>
-{$outputres}
+{$output2}
 </form>
 EOD;
 }

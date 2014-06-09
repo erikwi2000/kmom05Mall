@@ -20,41 +20,32 @@ else {
   $_SESSION['user'] = $user;
   //echo "logge new";
 }
-
-
-
+/*
+if(isset($_SESSION['bloggContent'])) {
+  $content = $_SESSION['bloggContent'];
+  //echo "logge old";
+}
+else {
+	$content = new CUser();
+  $_SESSION['bloggContent'] = $content;
+  //echo "logge new";
+}
+*/
 
 // Connect to a MySQL database using PHP PDO
 $db = new CDatabase($bwix['database2']);
   $bloggContent = new CContent($bwix['database2']);
-  
+ // createPost(array $postvar)
   
 $pluppas = $user->CheckLoggedIn($bwix['database']);
 //echo "PLUPPAS  " . $pluppas;
 // Get parameters 
 
-/*
-if($idnew) {
-$sql = 'INSERT INTO content (id) VALUES (NULL);';
-
- $url = empty($url) ? null : $url;
- // $params = array($title, $slug, $url, $data, $type, $filter, $published, $id);
- //$res = $db->ExecuteQuery($sql, $params);
-$res = $db->ExecuteQuery($sql);
-$idnew = FALSE;
-echo "<br> New createn!!!!" ;
-
-
-}
-
-*/
-
-
 
 $id     = isset($_POST['id'])    ? strip_tags($_POST['id']) : (isset($_GET['id']) ? strip_tags($_GET['id']) : null);
-//echo "<br> iD " . $id;
+echo "<br> iD " . $id;
 $title  = isset($_POST['title']) ? $_POST['title'] : null;
-//echo "<br> title " . $title . "  <br>";
+echo "<br> title " . $title . "  <br>";
 $slug   = isset($_POST['slug'])  ? $_POST['slug']  : null;
 $url    = isset($_POST['url'])   ? strip_tags($_POST['url']) : null;
 $data   = isset($_POST['data'])  ? $_POST['data'] : array();
@@ -63,19 +54,22 @@ $filter = isset($_POST['filter']) ? $_POST['filter'] : array();
 $published = isset($_POST['published'])  ? strip_tags($_POST['published']) : array();
 $save   = isset($_POST['save'])  ? true : false;
 $acronym = isset($_SESSION['user']) ? $_SESSION['user']->acronym : null;
-//echo "<br> stripped<br>";
+echo "<br> stripped<br>";
+
 
 // Check that incoming parameters are valid
 isset($acronym) or die('Check: You must login to edit.');
 is_numeric($id) or die('Check: Id must be numeric.');
-//echo "<br> acronym id " . $acronym . "  --  " . $id . "  <br>";
+
+
+echo "<br> acronym id " . $acronym . "  --  " . $id . "  <br>";
 // dumpa($db);
 // Check if form was submitted
 $output = null;
-//echo "<br> outside saved <br>";
-$updated = "";
+echo "<br> outside saved <br>";
+
 if($save) {
-   // echo "<br> inside saved <br>";
+     echo "<br> inside saved <br>";
   $sql = '
     UPDATE Content SET
       title   = ?,
@@ -89,10 +83,11 @@ if($save) {
     WHERE 
       id = ?
   ';
-  
   $url = empty($url) ? null : $url;
   $params = array($title, $slug, $url, $data, $type, $filter, $published, $id);
+  dumpa($params);
   $res = $db->ExecuteQuery($sql, $params);
+  //dumpa($res);
   if($res) {
     $output = 'Informationen sparades.';
   }
@@ -100,20 +95,41 @@ if($save) {
     $output = 'Informationen sparades EJ.<br><pre>' . print_r($db->ErrorInfo(), 1) . '</pre>';
   }
 }
+else{
+       echo "<br>NOT   Saving<br>";
+ $title  = "New Item";
+$slug   = " ";
+$url    = " ";
+$data   = " ";
+$type   = " ";
+$filter = " ";
+$published = " ";   
+
+
+    
+}
 
 
 // Select from database
 $sql = 'SELECT * FROM Content WHERE id = ?';
+echo "id" . $id;
 $res = $db->ExecuteSelectQueryAndFetchAll($sql, array($id));
-//  dumpa($res);
+ dumpa(array($id)) ;
+ dumpa($res);
+
 if(isset($res[0])) {
   $c = $res[0];
 }
 else {
-  die('Misslyckades: det finns inget innehåll med sådant id.');
+  //die('Misslyckades: det finns inget innehåll med sådant id.');
+    echo $id . "Misslyckades: det finns inget innehåll med sådant id.";
 }
 
 // Sanitize content before using it.
+
+if($save) {
+    echo "<br>Sanitize!<br>";
+
 $title  = htmlentities($c->title, null, 'UTF-8');
 $slug   = htmlentities($c->slug, null, 'UTF-8');
 $url    = htmlentities($c->url, null, 'UTF-8');
@@ -122,43 +138,18 @@ $type   = htmlentities($c->type, null, 'UTF-8');
 $filter = htmlentities($c->filter, null, 'UTF-8');
 $published = htmlentities($c->published, null, 'UTF-8');
 
-/**
- * Create a slug of a string, to be used as url.
- *
- * @param string $str the string to format as slug.
- * @returns str the formatted slug. 
- */
-$slug = $bloggContent->slugify($slug);
-
-
+}
 
 // Prepare content and store it all in variables in the Anax container.
 $bwix['title'] = "Uppdatera innehåll";
 $bwix['debug'] = $db->Dump();
-//$filter = array("err", "yuu","ghh");
 
-/*
-
-<form method="post" action="?p=choose-stylesheet-process">
-	<fieldset>
-		<!-- <legend>Välj Stylesheet</legend> -->
-		<p>
-			<label for="input1">Stylesheet:</label><br>
-			<select id='input1' name='stylesheet' onchange='form.submit();'><option value='-1'>Webbplatsens standard stylesheet</option><option value='debug.css' >debug.css</option><option value='empty.css' >empty.css</option><option value='forms.css' >forms.css</option><option value='stylesheet.css' >stylesheet.css</option><option value='stylesheet_blue.css' >stylesheet_blue.css</option></select>		</p>
-		
-		<p>
-			Du använder webbplatsens standard stylesheet.		</p>
-
-	</fieldset>
-</form>
-
-*/
 $bwix['main'] = <<<EOD
 <h1>{$bwix['title']}</h1>
 
 <form method=post>
   <fieldset>
-  <legend>Uppdatera innehåll</legend>
+  <legend>Skapa ny post</legend>
   <input type='hidden' name='id' value='{$id}'/>
   <p><label>Titel:<br/><input type='text' name='title' value='{$title}'/></label></p>
   <p><label>Slug:<br/><input type='text' name='slug' value='{$slug}'/></label></p>

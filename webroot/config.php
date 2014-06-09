@@ -56,9 +56,8 @@ $bwix['databaseAWAY']['driver_options'] = array(PDO::MYSQL_ATTR_INIT_COMMAND => 
 
 include(__DIR__ . '/databaseHOME.php');
 //include(__DIR__ . '/databaseAWAY.php');
+$bwix['database2']['driver_options'] = array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'"); 
 
-
-//dumpa('database');
 
 
 
@@ -102,6 +101,7 @@ label {
 input[type=text] {
   width: 300px;
 }
+
 
 select {
   height: 10em;

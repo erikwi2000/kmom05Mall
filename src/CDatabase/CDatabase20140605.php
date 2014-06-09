@@ -1,91 +1,58 @@
-<?php
-/**
- * Database wrapper, provides a database API for the framework but hides details of implementation.
- *
- */
-class CDatabase {
-
-  /**
-   * Members
-   */
-  private $options;                   // Options used when creating the PDO object
-  private $db   = null;               // The PDO object
-  private $stmt = null;               // The latest statement used to execute a query
-  private static $numQueries = 0;     // Count all queries made
-  private static $queries = array();  // Save all queries for debugging purpose
-  private static $params = array();   // Save all parameters for debugging purpose
-
-
-  /**
-   * Constructor creating a PDO object connecting to a choosen database.
-   *
-   * @param array $options containing details for connecting to the database.
-   *
-   */
-  public function __construct($options) {
-
-      $default = array(
-      'dsn' => null,
-      'username' => "Intentionally removed by CSource",
-      'password' => "Intentionally removed by CSource",
-      'driver_options' => null,
-      'fetch_style' => PDO::FETCH_OBJ,
-    );
-    $this->options = array_merge($default, $options);
-
-    try {
-      $this->db = new PDO($this->options['dsn'], $this->options['username'], $this->options['password'], $this->options['driver_options']);
-    }
-    catch(Exception $e) {
-      //throw $e; // For debug purpose, shows all connection details
-      throw new PDOException('Could not connect to database, hiding connection details.'); // Hide connection details.
-    }
-    
-    $this->db->SetAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, $this->options['fetch_style']); 
-
-    // Get debug information from session if any.
-    if(isset($_SESSION['CDatabase'])) {
-      self::$numQueries = $_SESSION['CDatabase']['numQueries'];
-      self::$queries    = $_SESSION['CDatabase']['queries'];
-      self::$params     = $_SESSION['CDatabase']['params'];
-      unset($_SESSION['CDatabase']);
-    }
-  }
+<?php 
+/** 
+ * Database wrapper, provides a database API for the framework but hides details of implementation. 
+ * 
+ */ 
+class CDatabase { 
   
-  
-            public function createNew22()  
-    {  
-        $title = isset($_POST['title']) ? $_POST['title'] : null;  
-          $sql = 'INSERT INTO Content (title) VALUES (?)';  
-          $acronym = isset($_SESSION['user']) ? $_SESSION['user']->acronym : null;  
-          $params = array($title);  
-          dumpa($params);
-          $this->ExecuteQuery($sql,$params);  
-          $id = $this->db->LastInsertId(); 
-          header('Location:blogg_edit.php?id=' . $id); 
-    }
-  
-          public function deleteAt22($sql, $params = array())   
-    {  
-      //  $sql = "DELETE FROM Content WHERE id = ?"; 
-      //  $test = $this->queryReturn($sql);
-       // dumpa($test);
-     //   $this->$params = array($id);  
-        echo "<br> sql in ...22<br>". $sql . "<br>";
-        
-        dumpa($params);
-        echo "<br> xxx ...22<br>";
-     dumpa($params);
-             echo "<br> yyy ...22<br>";
-      //        echo "<br>rrr <br> " . $rrr . "<br>";
-        $this->ExecuteQuery($sql, $params);  
+  /** 
+   * Members 
+   */ 
+  private $options;                   // Options used when creating the PDO object 
+  private $db   = null;               // The PDO object 
+  private $stmt = null;               // The latest statement used to execute a query 
+  private static $numQueries = 0;     // Count all queries made 
+  private static $queries = array();  // Save all queries for debugging purpose 
+  private static $params = array();   // Save all parameters for debugging purpose 
 
-    }
-  /**
-   * Getters
-   */
-  public function GetNumQueries() { return self::$numQueries; }
-  public function GetQueries() { return self::$queries; }
+  /** 
+   * Constructor creating a PDO object connecting to a choosen database. 
+   * 
+   * @param array $options containing details for connecting to the database. 
+   * 
+   */ 
+  public function __construct($options)  
+  { 
+    $default = array( 
+      'dsn' => null, 
+      'username' => null, 
+      'password' => null, 
+      'driver_options' => null, 
+      'fetch_style' => PDO::FETCH_OBJ, 
+    ); 
+    $this->options = array_merge($default, $options); 
+  
+    try  
+    { 
+      $this->db = new PDO($this->options['dsn'], $this->options['username'], $this->options['password'], $this->options['driver_options']); 
+    } 
+    catch(Exception $e)  
+    { 
+      //throw $e; // For debug purpose, shows all connection details 
+      throw new PDOException('Could not connect to database, hiding connection details.'); // Hide connection details. 
+    } 
+  
+    $this->db->SetAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, $this->options['fetch_style']);  
+
+    // Get debug information from session if any. 
+    if(isset($_SESSION['CDatabase']))  
+    { 
+      self::$numQueries = $_SESSION['CDatabase']['numQueries']; 
+      self::$queries    = $_SESSION['CDatabase']['queries']; 
+      self::$params     = $_SESSION['CDatabase']['params']; 
+      unset($_SESSION['CDatabase']); 
+    } 
+  } 
 
    /** 
    * Execute a select-query with arguments and return the resultset. 
@@ -138,41 +105,32 @@ class CDatabase {
    */ 
   
   
-  
-    
-    public function ExecuteQuery($query, $params = array(), $debug=false)  
+  /*
+   * 
+   * public function ExecuteQuery($query, $params = array(), $debug=false)  
   { 
-
-
  // echo "<br> Inside ExecCte query<br>";
     self::$queries[] = $query;  
     self::$params[]  = $params;  
     self::$numQueries++; 
-   // echo "<br>jjjjjjjjjjjj";
-  //echo "<br> Queryin EQ <br>";
-//  dumpa($query);
- //  echo "<br> prams in EQ <br>";
- //dumpa($params);
-  //echo "<br> prammmmmmmmmmmmmmm <br>";
+    echo "<br>jjjjjjjjjjjj";
+  echo "<br> Queryin EQ <br>";
+  dumpa($query);
+   echo "<br> prams in EQ <br>";
+ dumpa($params);
+  echo "<br> pramm <br>";
     if($debug)  
     { 
       echo "<p>Query = <br/><pre>{$query}</pre></p><p>Num query = " . self::$numQueries . "</p><p><pre>".print_r($params, 1)."</pre></p>"; 
     } 
-// dumpa($query);
+
     $this->stmt = $this->db->prepare($query); 
-    
     return $this->stmt->execute($params); 
     
   } 
-
+*/
   
-    public function ExecuteQuery2($query, $params = array(), $debug=false) {
-
-    // Make the query
-        
-        echo "<br> parmms 141<br>";
-        dumpa($params);
-        dumpa($query);
+    public function ExecuteQuery($query, $params = array(), $debug=false) {
 
     // Make the query
     $this->stmt = $this->db->prepare($query);
@@ -236,9 +194,9 @@ class CDatabase {
   /**
    * Getters
    */
- // public function GetNumQueries() { return self::$numQueries; }
+  public function GetNumQueries() { return self::$numQueries; }
 //===================================================  
-	//public function GetQueries() { return self::$queries; }
+	public function GetQueries() { return self::$queries; }
 
 //=================================================== 
   /**
@@ -315,7 +273,7 @@ if($debug) {
    * @param boolean $debug defaults to false, set to true to print out the sql query before executing it.
    * @return boolean returns TRUE on success or FALSE on failure. 
    */
-  public function ExecuteQuery3($query, $params = array(), $debug=false) {
+  public function ExecuteQuery2($query, $params = array(), $debug=false) {
  
     self::$queries[] = $query; 
     self::$params[]  = $params; 

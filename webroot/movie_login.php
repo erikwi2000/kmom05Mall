@@ -59,7 +59,7 @@ $bwix['main'] = <<<EOD
   <legend>Login</legend> 
   <p><em>Du kan logga in med doe:doe eller admin:admin.</em></p> 
   <p><label>Användare:<br/><input type='text' name='acronym' value=''/></label></p> 
-  <p><label>Lösenord:<br/><input type='text' name='password' value=''/></label></p> 
+  <p><label>Lösenord:<br/><input type='password' name='password' value=''/></label></p> 
   <p><input type='submit' name='login' value='Login'/></p> 
   <p><a href='movie_logout.php'>Logout</a></p> 
   <output><b>{$output}</b></output> 

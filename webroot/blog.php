@@ -1,15 +1,18 @@
-<?php 
-/**
- * This is a Anax pagecontroller.
- *
+<?php
+
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
-// Include the essential config-file which also creates the $bwix variable with its defaults.
+
+
 include(__DIR__.'/config.php'); 
 include(__DIR__.'/filter.php'); 
 
 
 // Connect to a MySQL database using PHP PDO
-$db = new CDatabase($bwix['database2']);
+$db = new CDatabase($anax['database']);
 
 
 // Get parameters 
@@ -33,10 +36,10 @@ $res = $db->ExecuteSelectQueryAndFetchAll($sql, array($slug));
 
 
 // Prepare content and store it all in variables in the Anax container.
-$bwix['title'] = "Bloggen";
-$bwix['debug'] = $db->Dump();
+$anax['title'] = "Bloggen";
+$anax['debug'] = $db->Dump();
 
-$bwix['main'] = null;
+$anax['main'] = null;
 if(isset($res[0])) {
   foreach($res as $c) {
     // Sanitize content before using it.
@@ -44,11 +47,11 @@ if(isset($res[0])) {
     $data   = doFilter(htmlentities($c->data, null, 'UTF-8'), $c->filter);
 
     if($slug) {
-      $bwix['title'] = "$title | " . $bwix['title'];
+      $anax['title'] = "$title | " . $anax['title'];
     }
     $editLink = $acronym ? "<a href='edit.php?id={$c->id}'>Uppdatera posten</a>" : null;
 
-    $bwix['main'] .= <<<EOD
+    $anax['main'] .= <<<EOD
 <section>
   <article>
   <header>
@@ -66,10 +69,10 @@ EOD;
   }
 }
 else if($slug) {
-  $bwix['main'] = "Det fanns inte en sådan bloggpost.";
+  $anax['main'] = "Det fanns inte en sådan bloggpost.";
 }
 else {
-  $bwix['main'] = "Det fanns inga bloggposter.";
+  $anax['main'] = "Det fanns inga bloggposter.";
 }
 
 
