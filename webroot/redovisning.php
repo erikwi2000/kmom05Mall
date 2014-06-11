@@ -56,6 +56,16 @@ $bwix['paths4'] .= '<p>me-sida:<a href="' . $mepath . '">me-sidan</a>';
 $bwix['paths4'] .= '<p>bwix:<a href="' . $mepath . "/../hello.php" . '">bwix-sidan</a>';
 $bwix['paths4'] .= '<p>github: <a href="https://github.com/erikwi2000/kmom04Mall">github</a>';
 
+// Fixa länkarna både statiska och dynamiska kmom02
+$bwix['paths5'] = '<p>PFlimmer:<a href="http://www.student.bth.se/~bjvi13/oophp/kmom05/kmom05Mall/webroot/blogg.php">blogg-sidan</a>';
+$bwix['paths5'] .= '<p>me-sida:<a href="http://www.student.bth.se/~bjvi13/oophp/kmom05/kmom05Mall/webroot/me.php">me-sidan</a>';
+$bwix['paths5'] .= '<p>bwix: <a href="http://www.student.bth.se/~bjvi13/oophp/kmom05/kmom05Mall/webroot/hello.php">bwix-sidan</a>' ;
+$bwix['paths5'] .= '<p>me-sida:<a href="' . $mepath . '">me-sidan</a>';
+$bwix['paths5'] .= '<p>bwix:<a href="' . $mepath . "/../hello.php" . '">bwix-sidan</a>';
+$bwix['paths5'] .= '<p>github: <a href="https://github.com/erikwi2000/kmom05Mall">github</a>';
+
+
+
 $bwix['main'] = <<<EOD
 <article class="readable">
 
@@ -241,11 +251,55 @@ Men en sak ska sägas: <h4>Man lär sig himla mycket</h4> men det tar alldeles f
 
 {$bwix['paths4']} 
 <h2>Kmom05: ...</h2>
+<h2> Intensivt</h2>
+<p>Jaa trots mycket använd tid  så blev jag inte klar i tid..
+    <br> Upplever kursupplägg såväl som kursmaterial väldigt bra 
+        och komplett och fullständigt.
+        <p> MEN jag hittar inte vägen till den minskade entropin. 
+            Detaljrikedomen är helt överväldigande.
+            <br> Dessutom så finns inte så mycket grad och art
+   på innehållet. Jag skulle uppskatta en struktur för kursen, 
+   kursmomenten.<br> Jag ser inte skogen för alla träd och skulle behöva én guide.
+       <br> Jag gjorde samma misstag som förut här...
+           satte igång med menyerna för att skapa dubbla, "pull-down". 
+  Såg hur andra hade gjort och det såg väldigt snyggt och 
+      innovativt ut. 
+          Tyvärr så "kom jag inte på hur göra" så jag 
+ löste det på ett "jätteklumpigt" sätt, finns kvar i kmom04.
+           <br> Kollade ännu mer på att många andra
+  hade gjort som jag ville det skulle bli 
+      MEN det blev inte så, annat än från utsidan...
+  
+   <p>Och sedan som en händelse så hittade jag de fyra navbar-instruktionerna från coachen.<br>
+       <br>Mångas lösningar påminde om det som coachen visade.
+     <br> På några timmar implementerade jag detta i stället för min "klumpiga" lösning.
+      <br> Tror inte jag är ensam om att tycka att
+       det är svårt att hitta just de guldkornen man behöver "just nu" 
+       <br> dvs man letar länge.
+        <br> Annat exempel: SESSIONS var länge lite
+         av magi.Kanske fortfarande lite så men inte alls 
+          lika "oförståeligt".<br>
+         Jag surfade, Google, första "draget" någon av de
+          första träffarna klickade läste ungefär en
+        halv A4-sida och plötsligen så insåg
+         jag mer än under hela kurserna rörande SESSIONS.
+         <br> Jag läset att någon/några mer 
+             hade haft likande svårigheter.
+             <br>Jag hittar ingen sökmotor på dbwebb,som söker i innehållet på dbwebb,
+    men som så mycket annat kan jag ha missat även detta, 
+        vilket skulle vara berikande att "träffa direkt".
+    <p>Jag är vid "dead line" halvvägs in i uppgift 5 
+        och som sades har precis gjort om navbar efter
+        senaste rön.
+            <p>MEN KURSEN ÄR RIKTIGT BRA INNEHÅLLSMÄSSIGT. MED LITE STRUKTUROCH 
+                LIKNANDE SÅ KAN DETTA BLI "BEST IN CLASS". 
+                    JAG GNÄLLER INTE AV MISSNÖJE I SÅDANT FALL HADE JAG LÄMNAT DETTA UTAN 
+            FASTMER SÅ FÖRSÖKER JAG FRÅN MIN UPPLEVELSE GE TIPS SOM SKULLE HA HJÄLPT MIG.
+      SÅ KRITIKEN ÄR HELT KONSTRUKTIVT MENAD OCH FÖRBÄTTRINGSPOTENTIALEN ÄR MYCKET GOD.</p>
 
-<p>Redovisningstext...</p>
+{$bwix['paths5']} 
+<h2></h2>
 
-
-<h2>Kmom06: ...</h2>
 
 <p>Redovisningstext...</p>
 

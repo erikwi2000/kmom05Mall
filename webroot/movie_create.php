@@ -55,7 +55,7 @@ label {
 }
 
 input[type=text] {
-  width: 300px;
+  width: 600px;
 }
 
 

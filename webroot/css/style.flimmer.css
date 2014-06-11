@@ -194,7 +194,7 @@ a.LinkButtonx {
 
 a.LinkButton {
   border-style: solid;
-  border-width : 3px 3px 3px 3px;
+  border-width : 30px 30px 30px 3px;
   text-decoration : none;
   background-color: #9F9;
   font-family: Arial;

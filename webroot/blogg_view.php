@@ -57,28 +57,28 @@ $rrc = $user->GetUserLoginStatus();
   if(isset($_GET['delete']))  
 {  
       
-        dumpa($bloggContent);
-echo "<br> dump bloggC 3 <br>";
-      echo "<brIn in GET deleta";
+    //    dumpa($bloggContent);
+//echo "<br> dump bloggC 3 <br>";
+     // echo "<brIn in GET deleta";
    //  $content->deleteAt($_GET['delete']);   
-      dumpa($bloggContent);
-      echo "<br>1. bloggContent<br>";
-      echo $_GET['delete'];
-            echo "<br>2. bloggContent<br>";
+     // dumpa($bloggContent);
+   //   echo "<br>1. bloggContent<br>";
+     /// echo $_GET['delete'];
+       //     echo "<br>2. bloggContent<br>";
             $xxx = $_GET['delete'];
             
              $bloggContent->params = array($xxx);
-            echo "<br>3. params array <br>";
-            dumpa($bloggContent->params);
-                echo "<br>4. dumpat! params array <br>";
+        //    echo "<br>3. params array <br>";
+        //    dumpa($bloggContent->params);
+         //       echo "<br>4. dumpat! params array <br>";
               $sql = "DELETE FROM Content WHERE id = ?"; 
               $bloggContent->query = array($sql);
-              echo "<br>55555555555555555. sql<br>";
-              echo "<br> <br> LEAVING blogg_view<br><br>";
+       //       echo "<br>55555555555555555. sql<br>";
+          //    echo "<br> <br> LEAVING blogg_view<br><br>";
               
     $rrrrrr = $db->deleteAt22($sql, $bloggContent->params);  
-                  echo "<br>6. rrrrrr<br>";
-    echo $rrrrrr;
+             //     echo "<br>6. rrrrrr<br>";
+  //  echo $rrrrrr;
     
 } 
    
@@ -118,12 +118,12 @@ echo "<br> dump bloggC 3XX <br>";
 if($user->GetAcronym()) 
 { 
     $output = "Du är inloggad som " . $user->GetAcronym() . "."; 
-    echo "<br>" . $output . "<br>";
+    //echo "<br>" . $output . "<br>";
 } 
 else 
 { 
     $output = "Du är INTE inloggad."; 
-  echo "<br>" . $output . "<br>";
+ // echo "<br>" . $output . "<br>";
 } 
 
 
@@ -165,18 +165,18 @@ foreach($res AS $key => $val) {
               $idplus++;
 
               $rrrr = $val->id;
-              echo "<br> idplus  " . $idplus . " id i posten " . $rrrr ;
+           //   echo "<br> idplus  " . $idplus . " id i posten " . $rrrr ;
 }
 
 $idx++;
-echo "<br> idplus  " . $idplus . " last id -->> " . $rrrr . " next free id  " . $idx;
+//echo "<br> idplus  " . $idplus . " last id -->> " . $rrrr . " next free id  " . $idx;
 
 $output ="<br><h3>" . $output . "</h3>";
 
 
 if(isset($_SESSION['newItem'])) {
  $_SESSION['newItem'] = 0;
- echo "<br> OneMoreNewsInView:   " . $_SESSION['newItem'];
+ //echo "<br> OneMoreNewsInView:   " . $_SESSION['newItem'];
   //echo "logge old";
 }
 //$bloggContent = new CContent($bwix['database2']);

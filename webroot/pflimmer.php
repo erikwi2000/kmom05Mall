@@ -19,7 +19,7 @@ $bwix['title'] = "Flimmer";
 // set the value of the session variable 'foo'
 $_SESSION['foo']='  bar     ---    '; 
 $tt = $_SESSION['foo'];
-$_SESSION['navbar2']='pflimmer'; 
+$_SESSION['navbar']='pflimmer'; 
 // echo a little message to say it is done
 //echo $_SESSION['foo'] . $_SESSION['navbar2'];
 //echo 'Setting value of foo' . $tt; 
@@ -95,6 +95,7 @@ $bwix['title'] = "STARTA FILMANDE";
 
 $bwix['main']  = <<<EOD
 <h1>{$bwix['title']}</h1>
+
 EOD;
 
 

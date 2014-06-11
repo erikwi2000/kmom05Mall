@@ -105,7 +105,9 @@ $res = $db->ExecuteSelectQueryAndFetchAll($sql);
  * @return string with links to order by column.
  */
 function orderby($column) {
-  return "<span class='orderby'><a href='?orderby={$column}&amp;order=asc'>&amp;darr;</a><a href='?orderby={$column}&amp;.order=desc'>&amp;.uarr;</a></span>";
+  return "<span class='orderby'>"
+    . "<a href='?orderby={$column}&amp;order=asc'>&darr;</a>"
+    . "<a href='?orderby={$column}&amp;order=desc'>&uarr;</a></span>";
 }
 // Put results into a HTML-table
 $tr = "<tr><th>Rad</th><th>Id " . orderby('id') . "</th><th>Bild</th><th>Titel " . orderby('title') . "</th><th>År " . orderby('year') . "</th><th>Genre</th></tr>";
